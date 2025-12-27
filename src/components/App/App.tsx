@@ -20,6 +20,11 @@ export default function App() {
   //! 🔹 Debounced search
   const [debouncedSearch] = useDebounce(rawSearch, 300);
 
+  const handleSearchChange = (value: string) => {
+    setRawSearch(value);
+    setCurrentPage(1);
+  };
+
   //! 🔹 Modal
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
@@ -29,11 +34,6 @@ export default function App() {
     currentPage,
     debouncedSearch
   );
-
-  //! 🔹 Reset page when search changes (only after debounce)
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch]);
 
   //! 🔹 Handle "no notes found"
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function App() {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox onChange={e => setRawSearch(e.target.value)} />
+        <SearchBox onChange={e => handleSearchChange(e.target.value)} />
         {data?.totalPages && data.totalPages > 1 && (
           <Pagination
             pageCount={data.totalPages}
